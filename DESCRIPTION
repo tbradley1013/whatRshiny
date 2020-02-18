@@ -1,12 +1,14 @@
 Package: whatRshiny
-Title: An Amazing Shiny App
+Title: A Jeapordy! Shiny App
 Version: 0.0.0.9000
-Authors@R: person("firstname", "lastname", email = "your@email.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
-License: What license is it under?
+Authors@R: person('Tyler', 'Bradley', email = 'tcb85@drexel.edu', role = c('cre', 'aut'))
+Description: Play a round of Jeapordy! from a real game
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
     shiny, 
     golem
 RoxygenNote: 6.1.0
+URL: https://github.com/tbradley1013/whatRshiny
+BugReports: https://github.com/tbradley1013/whatRshiny/issues
