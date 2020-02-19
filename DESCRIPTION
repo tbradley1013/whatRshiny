@@ -10,8 +10,9 @@ Imports:
     shiny,
     golem,
     whatr (>= 0.0.0.9000),
-    dplyr
-RoxygenNote: 6.1.1
+    dplyr,
+    magrittr
+RoxygenNote: 7.0.2
 URL: https://github.com/tbradley1013/whatRshiny
 BugReports: https://github.com/tbradley1013/whatRshiny/issues
 Remotes: 
