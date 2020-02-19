@@ -14,7 +14,8 @@ mod_ind_box_server(
   game_info,
   selected_row,
   selected_col,
-  selected_round
+  selected_round,
+  rv
 )
 }
 \arguments{

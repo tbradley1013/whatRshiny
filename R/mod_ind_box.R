@@ -24,7 +24,7 @@ mod_ind_box_ui <- function(id){
 #' @export
 #' @keywords internal
     
-mod_ind_box_server <- function(input, output, session, game_info, selected_row, selected_col, selected_round){
+mod_ind_box_server <- function(input, output, session, game_info, selected_row, selected_col, selected_round, rv){
   ns <- session$ns
   
   question <- reactive({
@@ -95,6 +95,14 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
   
   observeEvent(input$stay_silent, {
     removeModal()
+    
+    rv$n <- rv$n + 1
+  })
+  
+  observeEvent(input$submit_answer, {
+    removeModal()
+    
+    rv$n <- rv$n + 1
   })
 }
 

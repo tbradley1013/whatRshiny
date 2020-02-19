@@ -100,7 +100,8 @@ app_server <- function(input, output,session) {
         game_info = game_info,
         selected_row = .x,
         selected_col = .y,
-        selected_round = rv$round
+        selected_round = rv$round,
+        rv = rv
       )
     })
   })
