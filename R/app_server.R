@@ -3,20 +3,31 @@ app_server <- function(input, output,session) {
   session$onSessionEnded(stopApp)
   # List the first level callModules here
   rv <- reactiveValues(
-    game = sample(1:6000, 1)
+    game = sample(1:6000, 1),
+    round = 1,
+    n = 1
   )
   
   observe({
     rv$game_board <- whatr::whatr_board(game = rv$game)
     rv$clue_seq <- whatr::whatr_clues(game = rv$game)
+    
+    round_counts <- dplyr::count(rv$clue_seq, round)
+    
+    rv$n_round_1 <- round_counts$n[round_counts$round == 1]
+    rv$n_round_2 <- round_counts$n[round_counts$round == 2]
   })
   
-  categories <- reactive({
-    req(rv$game_board)
+  observe({
+    req(rv$n_round_1)
     
-    cats <- rv$game_board %>% 
-      distinct(round, col, category)
+    if (rv$n >= rv$n_round_1){
+      rv$round <- 2
+    } else if (rv$n >= (rv$n_round_1 + rv$n_round_2)){
+      rv$round <- 3
+    }
   })
+  
   
   game_info <- reactive({
     req(rv$game_board, rv$clue_seq)
@@ -53,7 +64,7 @@ app_server <- function(input, output,session) {
     req(categories())
     
     cats <- categories() %>% 
-      dplyr::filter(round == 1)
+      dplyr::filter(round == rv$round)
     
     cat_ui <- purrr::map(1:6, ~{
       value <- cats$category[cats$col == .x]
@@ -89,7 +100,7 @@ app_server <- function(input, output,session) {
         game_info = game_info,
         selected_row = .x,
         selected_col = .y,
-        selected_round = 1
+        selected_round = rv$round
       )
     })
   })
