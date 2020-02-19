@@ -7,7 +7,15 @@
 \usage{
 mod_ind_box_ui(id)
 
-mod_ind_box_server(input, output, session, r, row, col, round)
+mod_ind_box_server(
+  input,
+  output,
+  session,
+  game_info,
+  selected_row,
+  selected_col,
+  selected_round
+)
 }
 \arguments{
 \item{id}{shiny id}
