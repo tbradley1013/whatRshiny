@@ -15,6 +15,7 @@ golem::add_module( name = "my_other_module" ) # Name of the module
 usethis::use_package( "shiny" ) # To call each time you need a new package
 usethis::use_dev_package("whatr")
 usethis::use_package("dplyr")
+usethis::use_package("tidyr")
 usethis::use_pipe()
 
 ## 2.3 Add tests
