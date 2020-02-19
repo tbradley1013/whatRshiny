@@ -51,26 +51,40 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
   })
   
   observeEvent(input$question_box, {
-    updateActionButton(session, inputId = ns("question_box"), label = "")
+    updateActionButton(session = session, inputId = "question_box", label = "")
+    shinyjs::disable("question_box")
     
     dialog <- modalDialog(
       h5(
         question()$clue
       ),
-      textAreaInput(
+      textInput(
         inputId = "user_answer",
         label = "Answer",
       ),
       div(
         actionButton(
-          inputId = "submit_answer",
+          inputId = ns("submit_answer"),
           label = "Answer",
-        )
+          width = "47%"
+        ),
+        actionButton(
+          inputId = ns("stay_silent"),
+          label = "Stay Silent",
+          width = "47%"
+        ),
+        style = "width:300px;margin:0 auto;"
       ),
-      footer = modalButton("Cancel")
+      footer = NULL
+      # footer = modalButton("Cancel")
     )
     
     showModal(dialog)
+  })
+  
+  
+  observeEvent(input$stay_silent, {
+    removeModal()
   })
 }
 
