@@ -1,0 +1,26 @@
+.question-box {
+  background-color: #0C00A8;
+  color: white;
+  /*width: 16.66%;
+  height: 20%;*/
+  font-size:3em;
+}
+
+body {
+  background-color: #010037;
+  color: white;
+}
+
+.board {
+  width: 90%;
+  height: 900px;
+}
+
+.board-row{
+  width:100px;
+}
+
+.questions {
+  width:16%;
+  height:20%;
+}
