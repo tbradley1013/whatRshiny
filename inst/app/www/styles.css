@@ -1,24 +1,28 @@
-.question-box {
+.q-box {
   background-color: #0C00A8;
-  color: white;
+  color: #E5A561;
   /*width: 16.66%;
   height: 20%;*/
-  width:100%;
-  font-size:3em;
-}
-
-.question-cell {
-  width:100%;
+  width:16%;
+  height: 19%;
+  font-size:2em;
+  margin: 1px;
 }
 
 body {
   background-color: #010037;
   color: white;
+  text-align:center;
+}
+
+.modal-content {
+  background-color: #0C00A8;
 }
 
 .board {
-  width: 90%;
+  width: 100%;
   height: 900px;
+  margin: 0 auto;
 }
 
 .board-row{
