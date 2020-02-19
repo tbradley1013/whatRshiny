@@ -65,23 +65,38 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
     shinyjs::disable("question_box")
     
     dialog <- modalDialog(
-      h5(
+      h3(
         question()$clue
       ),
-      textInput(
-        inputId = "user_answer",
-        label = "Answer",
+      div(
+        shinyjs::hidden(
+          textInput(
+            inputId = ns("user_answer"),
+            label = "Answer"
+          ) 
+        ),
+        style = "width:300px;margin:0 auto;"
       ),
       div(
         actionButton(
-          inputId = ns("submit_answer"),
-          label = "Answer",
-          width = "47%"
+          inputId = ns("buzz_in"),
+          label = "Buzz In!",
+          width = "47%",
+          class = "btn-primary"
+        ),
+        shinyjs::hidden(
+          actionButton(
+            inputId = ns("submit_answer"),
+            label = "Submit Answer",
+            width = "100%",
+            class = "btn-success"
+          ) 
         ),
         actionButton(
           inputId = ns("stay_silent"),
           label = "Stay Silent",
-          width = "47%"
+          width = "47%",
+          class = "btn-danger"
         ),
         style = "width:300px;margin:0 auto;"
       ),
@@ -97,6 +112,13 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
     removeModal()
     
     rv$n <- rv$n + 1
+  })
+  
+  observeEvent(input$buzz_in, {
+    shinyjs::hide("buzz_in")
+    shinyjs::hide("stay_silent")
+    shinyjs::show("user_answer")
+    shinyjs::show("submit_answer")
   })
   
   observeEvent(input$submit_answer, {
