@@ -39,15 +39,25 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
     
     if (is.na(question()$n)){
       value <- ""
+      out <- shinyjs::disabled(
+        actionButton(
+          inputId = ns("question_box"),
+          label = value,
+          class = "q-box"
+        )
+      )
     } else {
       value <- paste0("$", get_value(selected_row))
+      out <- actionButton(
+        inputId = ns("question_box"),
+        label = value,
+        class = "q-box"
+      )
     }
     
-    actionButton(
-      inputId = ns("question_box"),
-      label = value,
-      class = "q-box"
-    )
+    
+    return(out)
+    
   })
   
   observeEvent(input$question_box, {
