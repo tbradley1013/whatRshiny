@@ -12,7 +12,8 @@ Imports:
     whatr (>= 0.0.0.9000),
     dplyr,
     magrittr,
-    tidyr
+    tidyr,
+    shinyjs
 RoxygenNote: 7.0.2
 URL: https://github.com/tbradley1013/whatRshiny
 BugReports: https://github.com/tbradley1013/whatRshiny/issues
