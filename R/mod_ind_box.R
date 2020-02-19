@@ -42,8 +42,8 @@ mod_ind_box_server <- function(input, output, session, r, row, col, round){
     value <- get_value(row)
     
     tags$span(
-      class = "question_cell",
-      # display = "table-cell",
+      class = "question-cell",
+      style = "width:200px;",
       tags$a(
         id = ns("question_box"),
         href = "#",
