@@ -9,6 +9,10 @@ app_ui <- function() {
       h1("whatRshiny"),
       div(
         class = "board",
+        div(
+          class = "board-row",
+          uiOutput("categories_ui", inline = TRUE)
+        ),
         # display = "table",
         purrr::map(1:5, function(z){
           div(

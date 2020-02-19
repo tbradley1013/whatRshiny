@@ -43,7 +43,33 @@ app_server <- function(input, output,session) {
     req(game_info())
     
     cats <- game_info() %>% 
-      distinct(round, col, category)
+      dplyr::distinct(round, col, category) %>% 
+      dplyr::filter(!is.na(category))
+    
+    return(cats)
+  })
+  
+  output$categories_ui <- renderUI({
+    req(categories())
+    
+    cats <- categories() %>% 
+      dplyr::filter(round == 1)
+    
+    cat_ui <- purrr::map(1:6, ~{
+      value <- cats$category[cats$col == .x]
+      
+      tagList(
+        shinyjs::disabled(
+          actionButton(
+            inputId = paste0("category_", .x),
+            label = value,
+            class = "cat-box"
+          )
+        )
+      )
+    })
+    
+    return(tagList(cat_ui))
   })
   
   
