@@ -11,22 +11,59 @@ app_server <- function(input, output,session) {
     rv$clue_seq <- whatr::whatr_clues(game = rv$game)
   })
   
+  categories <- reactive({
+    req(rv$game_board)
+    
+    cats <- rv$game_board %>% 
+      distinct(round, col, category)
+  })
+  
+  game_info <- reactive({
+    req(rv$game_board, rv$clue_seq)
+    
+    blank_board <- tidyr::crossing(row = 1:5, col = 1:6) %>% 
+      dplyr::mutate(round = 1) %>% 
+      dplyr::bind_rows(
+        tidyr::crossing(row = 1:5, col = 1:6) %>% 
+          dplyr::mutate(round = 2)
+      ) %>% 
+      dplyr::add_row(row = 0, col = 0, round = 3)
+    
+    out <- blank_board %>% 
+      dplyr::left_join(rv$clue_seq, by = c("round", "row", "col")) %>% 
+      dplyr::left_join(
+        dplyr::select(rv$game_board, -n),
+        by = "clue"
+      )
+    
+    return(out)
+  })
+  
+  categories <- reactive({
+    req(game_info())
+    
+    cats <- game_info() %>% 
+      distinct(round, col, category)
+  })
+  
+  
   observe({
     # browser()
     # ids <- paste(rv$clue_seq$row, rv$clue_seq$col, sep = "_")
     # ids <- ids[ids != "0_0"]
+    req(game_info())
     
-    purrr::map2(rv$clue_seq$row, rv$clue_seq$col, ~{
+    purrr::map2(game_info()$row, game_info()$col, ~{
       id <- paste("ind_box_ui", .x, .y, sep = "_")
 
       callModule(
         mod_ind_box_server,
         id = id,
         session = session,
-        r = rv,
-        row = .x,
-        col = .y,
-        round = 1
+        game_info = game_info,
+        selected_row = .x,
+        selected_col = .y,
+        selected_round = 1
       )
     })
   })

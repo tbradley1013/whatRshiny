@@ -24,41 +24,50 @@ mod_ind_box_ui <- function(id){
 #' @export
 #' @keywords internal
     
-mod_ind_box_server <- function(input, output, session, r, row, col, round){
+mod_ind_box_server <- function(input, output, session, game_info, selected_row, selected_col, selected_round){
   ns <- session$ns
   
   question <- reactive({
-    req(r$clue_seq)
+    req(game_info())
     # browser()
     
-    dplyr::filter(r$clue_seq, round == round, row == row, col == col)
+    dplyr::filter(game_info(), round == selected_round, row == selected_row, col == selected_col)
   })
   
   output$block <- renderUI({
     req(question())
     
-    info <- r$game_board[r$game_board$n == question()$n, ]
+    if (is.na(question()$n)){
+      value <- ""
+    } else {
+      value <- paste0("$", get_value(selected_row))
+    }
     
-    value <- get_value(row)
-    
-    tags$span(
-      class = "question-cell",
-      style = "width:200px;",
-      tags$a(
-        id = ns("question_box"),
-        href = "#",
-        tags$span(
-          class = "question-box", 
-          paste0("$", value)
-        )
-      )
+    actionButton(
+      inputId = ns("question_box"),
+      label = value,
+      class = "q-box"
     )
   })
   
   observeEvent(input$question_box, {
+    updateActionButton(session, inputId = ns("question_box"), label = "")
+    
     dialog <- modalDialog(
-      title = "Question",
-      footer = modalButton()
+      h5(
+        question()$clue
+      ),
+      textAreaInput(
+        inputId = "user_answer",
+        label = "Answer",
+      ),
+      div(
+        actionButton(
+          inputId = "submit_answer",
+          label = "Answer",
+        )
+      ),
+      footer = modalButton("Cancel")
     )
     
     showModal(dialog)
