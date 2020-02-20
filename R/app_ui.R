@@ -5,17 +5,21 @@ app_ui <- function() {
     golem_add_external_resources(),
     shinyjs::useShinyjs(),
     waiter::use_waiter(),
-    waiter::waiter_show_on_load(waiter::spin_fading_circles()),
+    waiter::waiter_show_on_load(waiter::spin_fading_circles(), color = "#0C00A8"),
     # List the first level UI elements here 
     fluidPage(
-      h1("Shiny Jeapordy!"),
-      h3("Replay past Jeapordy game using the whatR and whatRshiny packages!"),
+      h1("Shiny Jeopardy!"),
+      h3("Replay past Jeopardy games using the whatR and whatRshiny packages!"),
       div(
         id = "links-div",
         tags$a(
           icon("github"),
           href = "https://github.com/tbradley1013/whatRshiny"
         )
+      ),
+      div(
+        id = "copyright",
+        helpText('© "JEOPARDY!" is a registered trademark of Jeopardy Productions, Inc. License: All Rights Reserved.')
       ),
       div(
         class = "board",

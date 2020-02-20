@@ -51,3 +51,10 @@ body {
   right:10px;
   color:#E5A561;
 }
+
+#copyright {
+  position:absolute;
+  bottom:10px;
+  right:10px;
+  color:white;
+}
