@@ -47,7 +47,7 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
         )
       )
     } else {
-      value <- paste0("$", get_value(selected_row))
+      value <- paste0("$", get_value(selected_row, selected_round))
       out <- actionButton(
         inputId = ns("question_box"),
         label = value,
@@ -111,8 +111,9 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
   observeEvent(input$stay_silent, {
     removeModal()
     
+    # for some reason these button clicks happen twice everytime 
+    # they are clicked
     rv$n <- rv$n + 1
-    # cat("After Stay Silent n =", rv$n, "\n")
   })
   
   observeEvent(input$buzz_in, {
@@ -123,18 +124,84 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
   })
   
   observeEvent(input$submit_answer, {
+    # browser()
     
-    # for some reason these button clicks happen twice everytime 
-    # they are clicked
+    value <- get_value(selected_row, selected_round)
+    correct_answer <- question()$answer
+    
+    is_correct <- stringdist::stringdist(correct_answer, input$user_answer)
+    
+    if (is_correct < 3){
+      dialog <- modalDialog(
+        div(
+          "You have answered correctly!"
+        ),
+        div(
+          "Correct Answer:", correct_answer
+        ),
+        div(
+          "Your Answer:", 
+          span(input$user_answer, style = "color:green")
+        ),
+        div(
+          actionButton(
+            "close_confirm",
+            "Close",
+            width = "100%"
+          ),
+          style = "width:150px;margin:0 auto;"
+        ),
+        title = "Correct!",
+        fade = FALSE
+      )
+      
+      rv$score <- rv$score + (value/2)
+    } else {
+      dialog <- modalDialog(
+        div(
+          "You have answered incorrectly!"
+        ),
+        div(
+          "Correct Answer:", correct_answer
+        ),
+        div(
+          "Your Answer:", 
+          span(input$user_answer, style = "color:red")
+        ),
+        div(
+          actionButton(
+            ns("close_confirm"),
+            "Close",
+            width = "100%"
+          ),
+          style = "width:150px;margin:10px auto;"
+        ),
+        title = "Oh Sorry!",
+        fade = FALSE
+      )
+      
+      rv$score <- rv$score - (value/2)
+    }
+    
     rv$n <- rv$n + 1
-    # cat("After Submit Button n =", rv$n, "\n")
     
     removeModal()
+    showModal(dialog)
+    # for some reason these button clicks happen twice everytime 
+    # they are clicked
+    
   })
+  
+  
+  observeEvent(input$close_confirm, {
+    removeModal()
+  })
+  
+  
 }
 
-get_value <- function(row){
-  switch(
+get_value <- function(row, round){
+  out <- switch(
     row,
     `1` = 200,
     `2` = 400, 
@@ -142,6 +209,9 @@ get_value <- function(row){
     `4` = 800,
     `5` = 1000
   )
+  
+  out <- out*round
+  return(out)
 } 
     
 ## To be copied in the UI

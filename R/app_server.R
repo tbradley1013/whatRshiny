@@ -5,23 +5,23 @@ app_server <- function(input, output,session) {
   rv <- reactiveValues(
     game = sample(1:6000, 1),
     round = 1,
-    n = 0
+    n = 0,
+    score = 0
   )
   
   observe({
     isolate({
       rv$game_board <- whatr::whatr_board(game = rv$game)
       rv$clue_seq <- whatr::whatr_clues(game = rv$game)
-      
-      round_counts <- dplyr::count(rv$clue_seq, round)
-      
-      rv$n_round_1 <- round_counts$n[round_counts$round == 1]*2
-      rv$n_round_2 <- round_counts$n[round_counts$round == 2]*2
     })
+  })
+  
+  observe({
+    req(rv$clue_seq)
+    round_counts <- dplyr::count(rv$clue_seq, round)
     
-    # cat("n_round_1 =", rv$n_round_1, "\n")
-    # cat("n_round_2 =", rv$n_round_2, "\n")
-    # cat("Initially n =", rv$n, "\n")
+    rv$n_round_1 <- round_counts$n[round_counts$round == 1]*2
+    rv$n_round_2 <- round_counts$n[round_counts$round == 2]*2
   })
   
   observe({
@@ -92,13 +92,10 @@ app_server <- function(input, output,session) {
   
   
   observe({
-    # browser()
-    # ids <- paste(rv$clue_seq$row, rv$clue_seq$col, sep = "_")
-    # ids <- ids[ids != "0_0"]
     req(game_info())
     
     purrr::map2(game_info()$row, game_info()$col, ~{
-      id <- paste("ind_box_ui", .x, .y, sep = "_")
+      id <- paste("ind_box_ui_1", .x, .y, sep = "_")
 
       callModule(
         mod_ind_box_server,
@@ -107,15 +104,59 @@ app_server <- function(input, output,session) {
         game_info = game_info,
         selected_row = .x,
         selected_col = .y,
-        selected_round = rv$round,
+        selected_round = 1,
+        rv = rv
+      )
+    })
+    
+    purrr::map2(game_info()$row, game_info()$col, ~{
+      id <- paste("ind_box_ui_2", .x, .y, sep = "_")
+      
+      callModule(
+        mod_ind_box_server,
+        id = id,
+        session = session,
+        game_info = game_info,
+        selected_row = .x,
+        selected_col = .y,
+        selected_round = 2,
         rv = rv
       )
     })
   })
   
-  # callModule(mod_ind_box_server, "ind_box_ui_1", session = session,
-  #            r = rv, row = 1, col = 1, round = 1)
+  observe({
+    if (rv$round == 1){
+      shinyjs::show("round_1")
+      shinyjs::hide("round_2")
+    } else if (rv$round == 2){
+      shinyjs::hide("round_1")
+      shinyjs::show("round_2")
+    } else {
+      shinyjs::hide("round_1")
+      shinyjs::hide("round_2")
+    }
+  })
   
   
+  output$score <- renderUI({
+    req(rv$score)
+    
+    if (rv$score < 0){
+      style = "color:red;"
+    } else if (rv$score > 0){
+      style = "color:green;"
+    } else {
+      style = "color:white;"
+    }
+    
+    tagList(
+      div(
+        "Score: ", 
+        span(paste0("$", format(rv$score, big.mark = ",")), style = style),
+        style = "position:absolute;top:10px;left:10px;font-size:2em"
+      )
+    )
+  })
   
 }

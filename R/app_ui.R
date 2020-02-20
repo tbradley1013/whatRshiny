@@ -13,19 +13,40 @@ app_ui <- function() {
           class = "board-row",
           uiOutput("categories_ui", inline = TRUE)
         ),
-        # display = "table",
-        purrr::map(1:5, function(z){
+        div(
+          id = "round_1",
+          class = "round-div",
+          purrr::map(1:5, function(z){
+            div(
+              class = "board-row",
+              # display = "table-row",
+              purrr::map(1:6, ~{
+                mod_ind_box_ui(id = paste("ind_box_ui_1", z, .x, sep = "_"))
+              })
+            )
+          })
+        ),
+        shinyjs::hidden(
           div(
-            class = "board-row",
-            # display = "table-row",
-            purrr::map(1:6, ~{
-              mod_ind_box_ui(id = paste("ind_box_ui", z, .x, sep = "_"))
+            id = "round_2",
+            class = "round-div",
+            purrr::map(1:5, function(z){
+              div(
+                class = "board-row",
+                # display = "table-row",
+                purrr::map(1:6, ~{
+                  mod_ind_box_ui(id = paste("ind_box_ui_2", z, .x, sep = "_"))
+                })
+              )
             })
           )
-        })
+        )
+        # display = "table",
+        
         
         # mod_ind_box_ui("ind_box_ui_1")
-      )
+      ),
+      uiOutput("score")
     )
   )
 }
