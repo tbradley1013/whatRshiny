@@ -1,7 +1,8 @@
 #' @import shiny
 app_server <- function(input, output,session) {
   session$onSessionEnded(stopApp)
-  # List the first level callModules here
+ 
+  # defining initial reactive values ----
   rv <- reactiveValues(
     game = sample(1:6000, 1),
     round = 1,
@@ -11,7 +12,7 @@ app_server <- function(input, output,session) {
   )
   
   
-  
+  # loading the data ----
   observe({
     isolate({
       rv$game_board <- whatr::whatr_board(game = rv$game)
@@ -19,11 +20,13 @@ app_server <- function(input, output,session) {
     })
   })
   
+  # remove loading screen when board is ready ---
   observe({
     req(game_info(), rv$loaded)
     waiter::waiter_hide()
   })
   
+  # Calculating round counts and current round -----
   observe({
     req(rv$clue_seq)
     round_counts <- dplyr::count(rv$clue_seq, round)
@@ -53,7 +56,7 @@ app_server <- function(input, output,session) {
     cat("Current n =", rv$n, "and round =", rv$round, "\n")
   })
   
-  
+  # putting together all of the game info ----
   game_info <- reactive({
     req(rv$game_board, rv$clue_seq)
     
@@ -75,6 +78,8 @@ app_server <- function(input, output,session) {
     return(out)
   })
   
+  
+  # Creating a rendering teh categories ------
   categories <- reactive({
     req(game_info())
     
@@ -109,6 +114,7 @@ app_server <- function(input, output,session) {
   })
   
   
+  # Calling the box info for each question ----
   observe({
     req(game_info())
     
@@ -145,6 +151,8 @@ app_server <- function(input, output,session) {
     rv$loaded <- TRUE
   })
   
+  
+  # changing what is shown as the game progresses and rounds change ----
   observe({
     if (rv$round == 1){
       shinyjs::show("round_1")
@@ -159,7 +167,7 @@ app_server <- function(input, output,session) {
     }
   })
   
-  
+  # rendering the user score ----
   output$score <- renderUI({
     req(rv$score)
     
