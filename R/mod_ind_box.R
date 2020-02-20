@@ -100,7 +100,8 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
         ),
         style = "width:300px;margin:0 auto;"
       ),
-      footer = NULL
+      footer = NULL,
+      size = "l"
       # footer = modalButton("Cancel")
     )
     
@@ -129,9 +130,17 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
     value <- get_value(selected_row, selected_round)
     correct_answer <- question()$answer
     
-    is_correct <- stringdist::stringdist(correct_answer, input$user_answer)
+    answer_stringdist <- stringdist::stringdist(correct_answer, input$user_answer)
     
-    if (is_correct < 3){
+    if (stringr::str_detect(stringr::str_to_lower(correct_answer), stringr::str_to_lower(input$user_answer))){
+      is_correct <- TRUE
+    } else if (answer_stringdist < 3) {
+      is_correct <- TRUE
+    } else {
+      is_correct <- FALSE
+    }
+    
+    if (is_correct){
       dialog <- modalDialog(
         div(
           "You have answered correctly!"
@@ -152,7 +161,8 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
           style = "width:150px;margin:0 auto;"
         ),
         title = "Correct!",
-        fade = FALSE
+        fade = FALSE,
+        size = "l"
       )
       
       rv$score <- rv$score + (value/2)
@@ -177,7 +187,8 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
           style = "width:150px;margin:10px auto;"
         ),
         title = "Oh Sorry!",
-        fade = FALSE
+        fade = FALSE,
+        size = "l"
       )
       
       rv$score <- rv$score - (value/2)
