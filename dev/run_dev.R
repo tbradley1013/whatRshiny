@@ -11,3 +11,4 @@ golem::document_and_reload()
 # Run the application
 whatRshiny::run_app()
 
+
