@@ -55,6 +55,11 @@ app_ui <- function() {
               )
             })
           )
+        ),
+        shinyjs::hidden(
+          div(
+            id = "final-jeapordy"
+          )
         )
         # display = "table",
         
