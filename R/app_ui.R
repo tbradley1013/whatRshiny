@@ -5,7 +5,7 @@ app_ui <- function() {
     golem_add_external_resources(),
     shinyjs::useShinyjs(),
     waiter::use_waiter(),
-    waiter::waiter_show_on_load(waiter::spin_fading_circles(), color = "#0C00A8"),
+    waiter::waiter_show_on_load(custom_loading_spinner(), color = "#0C00A8"),
     # List the first level UI elements here 
     fluidPage(
       h1("Shiny Jeopardy!"),
@@ -81,5 +81,14 @@ golem_add_external_resources <- function(){
     # Or for example, you can add shinyalert::useShinyalert() here
     tags$link(rel="stylesheet", type="text/css", href="www/styles.css"),
     tags$script(src = "www/button-click.js")
+  )
+}
+
+
+custom_loading_spinner <- function(){
+  tagList(
+    h1("Loading you Jeapordy! game...", style = "margin-bottom:20px"),
+    # waiter::spin_fading_circles()
+    waiter::spin_solar()
   )
 }

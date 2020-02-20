@@ -6,7 +6,8 @@ app_server <- function(input, output,session) {
     game = sample(1:6000, 1),
     round = 1,
     n = 0,
-    score = 0
+    score = 0,
+    loaded = FALSE
   )
   
   
@@ -19,7 +20,7 @@ app_server <- function(input, output,session) {
   })
   
   observe({
-    req(rv$game_board, rv$clue_seq)
+    req(game_info(), rv$loaded)
     waiter::waiter_hide()
   })
   
@@ -140,6 +141,8 @@ app_server <- function(input, output,session) {
         rv = rv
       )
     })
+    
+    rv$loaded <- TRUE
   })
   
   observe({
