@@ -47,7 +47,8 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
         )
       )
     } else {
-      value <- paste0("$", get_value(selected_row))
+      value <- ifelse(selected_round == 1, get_value(selected_row), get_value(selected_row)*2)
+      value <- paste0("$", value)
       out <- actionButton(
         inputId = ns("question_box"),
         label = value,
