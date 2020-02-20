@@ -9,6 +9,8 @@ app_server <- function(input, output,session) {
     score = 0
   )
   
+  
+  
   observe({
     isolate({
       rv$game_board <- whatr::whatr_board(game = rv$game)
@@ -17,22 +19,37 @@ app_server <- function(input, output,session) {
   })
   
   observe({
+    req(rv$game_board, rv$clue_seq)
+    waiter::waiter_hide()
+  })
+  
+  observe({
     req(rv$clue_seq)
     round_counts <- dplyr::count(rv$clue_seq, round)
     
     rv$n_round_1 <- round_counts$n[round_counts$round == 1]*2
     rv$n_round_2 <- round_counts$n[round_counts$round == 2]*2
+    cat("Round 1 Total =", rv$n_round_1, "\n")
+    cat("Round 2 Total =", rv$n_round_2, "\n")
   })
   
   observe({
     req(rv$n_round_1)
     
-    if (rv$n >= rv$n_round_1){
+    total <- rv$n_round_1 + rv$n_round_2
+    
+    if (rv$n < rv$n_round_1){
+      rv$round <- 1
+    } else if (rv$n < total){
       rv$round <- 2
-    } else if (rv$n >= (rv$n_round_1 + rv$n_round_2)){
+    } else {
       rv$round <- 3
     }
     
+  })
+  
+  observe({
+    cat("Current n =", rv$n, "and round =", rv$round, "\n")
   })
   
   
@@ -135,6 +152,7 @@ app_server <- function(input, output,session) {
     } else {
       shinyjs::hide("round_1")
       shinyjs::hide("round_2")
+      shinyjs::hide("categories-row")
     }
   })
   

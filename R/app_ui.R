@@ -4,12 +4,23 @@ app_ui <- function() {
     # Leave this function for adding external resources
     golem_add_external_resources(),
     shinyjs::useShinyjs(),
+    waiter::use_waiter(),
+    waiter::waiter_show_on_load(waiter::spin_fading_circles()),
     # List the first level UI elements here 
     fluidPage(
-      h1("whatRshiny"),
+      h1("Shiny Jeapordy!"),
+      h3("Replay past Jeapordy game using the whatR and whatRshiny packages!"),
+      div(
+        id = "links-div",
+        tags$a(
+          icon("github"),
+          href = "https://github.com/tbradley1013/whatRshiny"
+        )
+      ),
       div(
         class = "board",
         div(
+          id = "categories-row",
           class = "board-row",
           uiOutput("categories_ui", inline = TRUE)
         ),
