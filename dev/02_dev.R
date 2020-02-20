@@ -18,6 +18,8 @@ usethis::use_package("dplyr")
 usethis::use_package("tidyr")
 usethis::use_package("shinyjs")
 usethis::use_package("stringdist")
+usethis::use_package("waiter")
+usethis::use_package("stringr")
 usethis::use_pipe()
 
 ## 2.3 Add tests
