@@ -112,6 +112,7 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
     removeModal()
     
     rv$n <- rv$n + 1
+    # cat("After Stay Silent n =", rv$n, "\n")
   })
   
   observeEvent(input$buzz_in, {
@@ -122,9 +123,13 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
   })
   
   observeEvent(input$submit_answer, {
-    removeModal()
     
+    # for some reason these button clicks happen twice everytime 
+    # they are clicked
     rv$n <- rv$n + 1
+    # cat("After Submit Button n =", rv$n, "\n")
+    
+    removeModal()
   })
 }
 

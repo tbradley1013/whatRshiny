@@ -5,17 +5,23 @@ app_server <- function(input, output,session) {
   rv <- reactiveValues(
     game = sample(1:6000, 1),
     round = 1,
-    n = 1
+    n = 0
   )
   
   observe({
-    rv$game_board <- whatr::whatr_board(game = rv$game)
-    rv$clue_seq <- whatr::whatr_clues(game = rv$game)
+    isolate({
+      rv$game_board <- whatr::whatr_board(game = rv$game)
+      rv$clue_seq <- whatr::whatr_clues(game = rv$game)
+      
+      round_counts <- dplyr::count(rv$clue_seq, round)
+      
+      rv$n_round_1 <- round_counts$n[round_counts$round == 1]*2
+      rv$n_round_2 <- round_counts$n[round_counts$round == 2]*2
+    })
     
-    round_counts <- dplyr::count(rv$clue_seq, round)
-    
-    rv$n_round_1 <- round_counts$n[round_counts$round == 1]
-    rv$n_round_2 <- round_counts$n[round_counts$round == 2]
+    # cat("n_round_1 =", rv$n_round_1, "\n")
+    # cat("n_round_2 =", rv$n_round_2, "\n")
+    # cat("Initially n =", rv$n, "\n")
   })
   
   observe({
@@ -26,6 +32,7 @@ app_server <- function(input, output,session) {
     } else if (rv$n >= (rv$n_round_1 + rv$n_round_2)){
       rv$round <- 3
     }
+    
   })
   
   
