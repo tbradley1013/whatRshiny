@@ -1,21 +1,18 @@
 
 $(document).keydown(function(event){
     if (event.which === 83){
-      click_silent_button();
+      click_button("Stay Silent");
     } else if (event.which === 66){
-      click_buzz_button();
+      click_button("Buzz In");
+    } else if (event.which === 13){
+      click_button("Submit Answer");
     }
 });
 
 
-function click_silent_button(){
-  if ($("button:contains('Stay Silent')").length > 0) {
-    $("button:contains('Stay Silent')").click();
-  }
-}
-
-function click_buzz_button(){
-  if ($("button:contains('Buzz In')").length > 0) {
-    $("button:contains('Buzz In')").click();
+function click_button(button_label){
+  const target = "button:contains('" + button_label + "')"; 
+  if ($(target).length > 0) {
+    $(target).click();
   }
 }
