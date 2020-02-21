@@ -17,7 +17,19 @@
   width:16%;
   height: 100px;
   margin: 1px;
-  line-height:20%;
+  font-size:20px;
+  white-space: normal;
+  text-align:center;
+}
+
+.categories-row {
+  width:90%;
+  margin: 0 auto;
+}
+
+.categories {
+  width:16%;
+  height:20%;
 }
 
 body {
