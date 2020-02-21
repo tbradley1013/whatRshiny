@@ -15,8 +15,8 @@ app_server <- function(input, output,session) {
   # loading the data ----
   observe({
     isolate({
-      rv$game_board <- whatr::whatr_board(game = rv$game)
-      rv$clue_seq <- whatr::whatr_clues(game = rv$game)
+      rv$game_board <- whatr_board(game = rv$game)
+      rv$clue_seq <- whatr_clues(game = rv$game)
     })
   })
   

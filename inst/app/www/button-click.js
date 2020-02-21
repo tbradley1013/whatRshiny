@@ -13,6 +13,8 @@ $(document).keydown(function(event){
 function click_button(button_label){
   const target = "button:contains('" + button_label + "')"; 
   if ($(target).length > 0) {
-    $(target).click();
+    if (!$(target).hasClass("disabled")){
+       $(target).click();
+    }
   }
 }

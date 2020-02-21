@@ -92,7 +92,7 @@ golem_add_external_resources <- function(){
 
 custom_loading_spinner <- function(){
   tagList(
-    h1("Loading you Jeapordy! game...", style = "margin-bottom:20px"),
+    h1("Loading your Jeapordy! game...", style = "margin-bottom:20px"),
     # waiter::spin_fading_circles()
     # waiter::spin_solar()
     waiter::spin_loaders(4, color = "#E5A561", style = "font-size:2em")

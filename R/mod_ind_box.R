@@ -86,14 +86,15 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
           width = "47%",
           class = "btn-primary"
         ),
-        shinyjs::hidden(
-          actionButton(
-            inputId = ns("submit_answer"),
-            label = "Submit Answer",
-            width = "100%",
-            class = "btn-success"
-          ) 
-        ),
+        shinyjs::disabled(
+          shinyjs::hidden(
+            actionButton(
+              inputId = ns("submit_answer"),
+              label = "Submit Answer",
+              width = "100%",
+              class = "btn-success"
+            ) 
+          )),
         actionButton(
           inputId = ns("stay_silent"),
           label = "Stay Silent",
@@ -121,9 +122,12 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
   
   observeEvent(input$buzz_in, {
     shinyjs::hide("buzz_in")
+    shinyjs::disable("buzz_in")
     shinyjs::hide("stay_silent")
+    shinyjs::disable("stay_silent")
     shinyjs::show("user_answer")
     shinyjs::show("submit_answer")
+    shinyjs::enable("submit_answer")
   })
   
   observeEvent(input$submit_answer, {
