@@ -230,6 +230,7 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
           style = "width:150px;margin:0 auto;"
         ),
         title = "Correct!",
+        footer = NULL,
         fade = FALSE,
         size = "l"
       )
@@ -256,6 +257,7 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
           style = "width:150px;margin:10px auto;"
         ),
         title = "Oh Sorry!",
+        footer = NULL,
         fade = FALSE,
         size = "l"
       )
