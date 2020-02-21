@@ -65,6 +65,83 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
   observeEvent(input$question_box, {
     updateActionButton(session = session, inputId = "question_box", label = "")
     shinyjs::disable("question_box")
+    value <- get_value(selected_row, selected_round)
+    
+    if (question()$double){
+      max_value <- max(value*selected_round, rv$score)
+      dialog <- modalDialog(
+        h1("Daily Double!"),
+        numericInput(
+          inputId = ns("wager"),
+          label = "What's your wager",
+          value = max_value,
+          max = max_value,
+          min = 0,
+          step = 100,
+          width = "100%"
+        ),
+        actionButton(
+          inputId = ns("submit_wager"),
+          label = "Make Wager!"
+        ),
+        footer = NULL,
+        size = "l"
+      )
+      
+      showModal(dialog)
+    } else {
+      rv$q_value <- value
+      dialog <- modalDialog(
+        h1(
+          question()$clue
+        ),
+        br(),br(),br(),
+        div(
+          shinyjs::hidden(
+            textInput(
+              inputId = ns("user_answer"),
+              label = "Answer"
+            ) 
+          ),
+          style = "width:300px;margin:0 auto;"
+        ),
+        div(
+          actionButton(
+            inputId = ns("buzz_in"),
+            label = "Buzz In!",
+            width = "47%",
+            class = "btn-primary"
+          ),
+          shinyjs::disabled(
+            shinyjs::hidden(
+              actionButton(
+                inputId = ns("submit_answer"),
+                label = "Submit Answer",
+                width = "100%",
+                class = "btn-success"
+              ) 
+            )),
+          actionButton(
+            inputId = ns("stay_silent"),
+            label = "Stay Silent",
+            width = "47%",
+            class = "btn-danger"
+          ),
+          style = "width:300px;margin:0 auto;"
+        ),
+        footer = NULL,
+        size = "l"
+        # footer = modalButton("Cancel")
+      )
+      
+      showModal(dialog)
+    }
+    
+    
+  })
+  
+  observeEvent(input$make_wager, {
+    rv$q_value <- input$wager
     
     dialog <- modalDialog(
       h1(
@@ -72,36 +149,19 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
       ),
       br(),br(),br(),
       div(
-        shinyjs::hidden(
-          textInput(
-            inputId = ns("user_answer"),
-            label = "Answer"
-          ) 
+        textInput(
+          inputId = ns("user_answer"),
+          label = "Answer"
         ),
         style = "width:300px;margin:0 auto;"
       ),
       div(
         actionButton(
-          inputId = ns("buzz_in"),
-          label = "Buzz In!",
-          width = "47%",
-          class = "btn-primary"
-        ),
-        shinyjs::disabled(
-          shinyjs::hidden(
-            actionButton(
-              inputId = ns("submit_answer"),
-              label = "Submit Answer",
-              width = "100%",
-              class = "btn-success"
-            ) 
-          )),
-        actionButton(
-          inputId = ns("stay_silent"),
-          label = "Stay Silent",
-          width = "47%",
-          class = "btn-danger"
-        ),
+          inputId = ns("submit_answer"),
+          label = "Submit Answer",
+          width = "100%",
+          class = "btn-success"
+        ) ,
         style = "width:300px;margin:0 auto;"
       ),
       footer = NULL,
@@ -134,7 +194,7 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
   observeEvent(input$submit_answer, {
     # browser()
     
-    value <- get_value(selected_row, selected_round)
+    value <- rv$q_value
     correct_answer <- question()$answer
     
     answer_stringdist <- stringdist::stringdist(correct_answer, input$user_answer)
