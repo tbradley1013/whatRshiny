@@ -67,9 +67,10 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
     shinyjs::disable("question_box")
     
     dialog <- modalDialog(
-      h3(
+      h1(
         question()$clue
       ),
+      br(),br(),br(),
       div(
         shinyjs::hidden(
           textInput(
