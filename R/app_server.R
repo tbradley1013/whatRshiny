@@ -17,8 +17,19 @@ app_server <- function(input, output,session) {
     isolate({
       rv$game_board <- whatr_board(game = rv$game)
       rv$clue_seq <- whatr_clues(game = rv$game)
+      rv$game_info <- whatr_info(game = rv$game)
     })
   })
+  
+  output$game_info <- renderUI({
+    req(rv$game_info)
+    tagList(
+      h5("Show Number:", rv$game_info$show),
+      h5("Air Date:", format(rv$game_info$date, "%b %d, %Y"))
+    )
+  })
+  
+  shiny::outputOptions(output, "game_info", suspendWhenHidden = FALSE)
   
   # remove loading screen when board is ready ---
   observe({

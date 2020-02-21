@@ -154,3 +154,13 @@ whatr_order <- function(game = NULL, date = NULL, show = NULL) {
   order$col[length(order$col)] <- 0
   return(order)
 }
+
+whatr_info <- function(game = NULL, date = NULL, show = NULL) {
+  data <- read_game(game, date, null)
+  title <- rvest::html_text(rvest::html_node(data, "title"))
+  tibble::tibble(
+    game = as.integer(game),
+    show = as.integer(stringr::str_extract(title, "(\\d+)")),
+    date = as.Date(stringr::str_extract(title, "\\d+-\\d+-\\d+$"))
+  )
+}

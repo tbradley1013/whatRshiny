@@ -10,6 +10,7 @@ app_ui <- function() {
     fluidPage(
       h1("Shiny Jeopardy!"),
       h3("Replay past Jeopardy games using the whatR and whatRshiny packages!"),
+      uiOutput("game_info"),
       div(
         id = "links-div",
         tags$a(
@@ -92,9 +93,7 @@ golem_add_external_resources <- function(){
 
 custom_loading_spinner <- function(){
   tagList(
-    h1("Loading your Jeapordy! game...", style = "margin-bottom:20px"),
-    # waiter::spin_fading_circles()
-    # waiter::spin_solar()
+    h1("Loading your Jeapordy! game...", style = "margin-bottom:20px;margin-top:-50px;"),
     waiter::spin_loaders(4, color = "#E5A561", style = "font-size:2em")
   )
 }
