@@ -158,6 +158,13 @@ app_server <- function(input, output,session) {
             label = value,
             class = "cat-box"
           )
+          # span(
+          #   # inputId = paste0("category_", .x),
+          #   id = paste0("category_", .x),
+          #   class = "cat-box",
+          #   # label = value
+          #   value
+          # )
         )
       )
     })

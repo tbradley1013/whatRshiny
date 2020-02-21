@@ -26,7 +26,7 @@ app_ui <- function() {
         div(
           id = "categories-row",
           class = "board-row",
-          uiOutput("categories_ui", inline = TRUE)
+          uiOutput("categories_ui", inline = TRUE, class = "categories")
         ),
         div(
           id = "round_1",
