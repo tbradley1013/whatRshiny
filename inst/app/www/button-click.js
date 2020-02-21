@@ -6,6 +6,8 @@ $(document).keydown(function(event){
       click_button("Buzz In");
     } else if (event.which === 13){
       click_button("Submit Answer");
+      click_button("Close");
+      click_button("Thanks Alex!");
     }
 });
 
