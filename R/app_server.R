@@ -68,6 +68,37 @@ app_server <- function(input, output,session) {
     cat("Current n =", rv$n, "and round =", rv$round, "\n")
   })
   
+  observe({
+    if (rv$n == 30){
+      dialog <- modalDialog(
+        h3("Tell us a little about yourself!"),
+        textInput(
+          inputId = "user_name",
+          label = "What's your name?",
+          width = "100%"
+        ),
+        textInput(
+          inputId = "user_fact",
+          label = "I hear you have an interesting hobby...",
+          width = "100%"
+        ),
+        actionButton(
+          inputId = "user_info_submit",
+          label = "Thanks Alex!",
+          class = "btn-primary btn-lg"
+        ),
+        footer = NULL,
+        size = "l"
+      )
+      
+      showModal(dialog)
+    }
+  })
+  
+  observeEvent(input$user_info_submit, {
+    removeModal()
+  })
+  
   # putting together all of the game info ----
   game_info <- reactive({
     req(rv$game_board, rv$clue_seq)
