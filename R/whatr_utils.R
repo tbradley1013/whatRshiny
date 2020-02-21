@@ -30,8 +30,11 @@ read_scores <- function(game = NULL, date = NULL, show = NULL) {
   return(showscore)
 }
 
-whatr_board <- function (game = NULL, date = NULL, show = NULL){
-  data <- read_game(game, date, show)
+whatr_board <- function (html = NULL, game = NULL, date = NULL, show = NULL){
+  if (!is.null(html)){
+    data <- html
+  } else data <- read_game(game, date, show)
+  
   categories <- data %>% 
     rvest::html_nodes("table td.category_name") %>% 
     rvest::html_text(trim = TRUE) %>% 
@@ -102,22 +105,27 @@ whatr_board <- function (game = NULL, date = NULL, show = NULL){
     dplyr::select(n, category, clue, answer)
 }
 
-whatr_clues <- function(game = NULL, date = NULL, show = NULL) {
-  # data <- showgame(game, date, show)
-  data <- read_game(game, date, show)
+whatr_clues <- function(html = NULL, game = NULL, date = NULL, show = NULL) {
+  # browser()
+  if (!is.null(html)){
+    data <- html
+  } else data <- read_game(game, date, show)
+  
   data %>%
     rvest::html_nodes("table td.clue_text") %>%
     rvest::html_text() %>%
     stringr::str_to_title() %>%
     stringr::str_replace_all("\"", "\'") %>%
     tibble::enframe(name = NULL, value = "clue") %>%
-    dplyr::bind_cols(whatr_order(game)) %>%
+    dplyr::bind_cols(whatr_order(html)) %>%
     dplyr::select(round, col, row, n, clue)
 }
 
-whatr_order <- function(game = NULL, date = NULL, show = NULL) {
-  # data <- showgame(game, date, show)
-  data <- read_game(game, date, show)
+whatr_order <- function(html = NULL, game = NULL, date = NULL, show = NULL) {
+  if (!is.null(html)){
+    data <- html
+  } else data <- read_game(game, date, show)
+  
   single_order <- data %>%
     rvest::html_nodes("#jeopardy_round > table td.clue_order_number") %>%
     rvest::html_text() %>%
@@ -164,8 +172,11 @@ whatr_order <- function(game = NULL, date = NULL, show = NULL) {
   return(order)
 }
 
-whatr_info <- function(game = NULL, date = NULL, show = NULL) {
-  data <- read_game(game, date, null)
+whatr_info <- function(html = NULL, game = NULL, date = NULL, show = NULL) {
+  if (!is.null(html)){
+    data <- html
+  } else data <- read_game(game, date, show)
+  
   title <- rvest::html_text(rvest::html_node(data, "title"))
   tibble::tibble(
     game = as.integer(game),
@@ -174,15 +185,17 @@ whatr_info <- function(game = NULL, date = NULL, show = NULL) {
   )
 }
 
-whatr_doubles <- function(game = NULL){
-  showscore <- read_scores(game = game)
+whatr_doubles <- function(html = NULL, game = NULL){
+  if (!is.null(html)){
+    data <- html 
+  } else data <- read_scores(game = game)
   
-  single_doubles <- showscore %>%
+  single_doubles <- data %>%
     rvest::html_node("#jeopardy_round > table td.ddred") %>%
     rvest::html_text() %>%
     base::as.integer()
   
-  double_doubles <- showscore %>%
+  double_doubles <- data %>%
     rvest::html_nodes("#double_jeopardy_round > table td.ddred") %>%
     rvest::html_text() %>%
     base::as.integer() %>%
