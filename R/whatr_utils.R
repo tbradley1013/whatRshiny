@@ -21,6 +21,15 @@ read_game <- function(game = NULL, date = NULL, show = NULL) {
   return(showgame)
 }
 
+read_scores <- function(game = NULL, date = NULL, show = NULL) {
+  response <- httr::GET(
+    url = "http://www.j-archive.com/showscores.php",
+    query = list(game_id = whatr_id(game, date, show))
+  )
+  showscore <- httr::content(response)
+  return(showscore)
+}
+
 whatr_board <- function (game = NULL, date = NULL, show = NULL){
   data <- read_game(game, date, show)
   categories <- data %>% 
@@ -163,4 +172,21 @@ whatr_info <- function(game = NULL, date = NULL, show = NULL) {
     show = as.integer(stringr::str_extract(title, "(\\d+)")),
     date = as.Date(stringr::str_extract(title, "\\d+-\\d+-\\d+$"))
   )
+}
+
+whatr_doubles <- function(game = NULL){
+  showscore <- read_scores(game = game)
+  
+  single_doubles <- showscore %>%
+    rvest::html_node("#jeopardy_round > table td.ddred") %>%
+    rvest::html_text() %>%
+    base::as.integer()
+  
+  double_doubles <- showscore %>%
+    rvest::html_nodes("#double_jeopardy_round > table td.ddred") %>%
+    rvest::html_text() %>%
+    base::as.integer() %>%
+    base::unique()
+  
+  return(list(single = single_doubles, double = double_doubles))
 }

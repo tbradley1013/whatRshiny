@@ -18,6 +18,7 @@ app_server <- function(input, output,session) {
       rv$game_board <- whatr_board(game = rv$game)
       rv$clue_seq <- whatr_clues(game = rv$game)
       rv$game_info <- whatr_info(game = rv$game)
+      rv$doubles <- whatr_doubles(game = rv$game)
     })
   })
   
@@ -71,6 +72,8 @@ app_server <- function(input, output,session) {
   game_info <- reactive({
     req(rv$game_board, rv$clue_seq)
     
+    doubles <- c(rv$doubles$single, (rv$doubles$double + rv$n_round_1))
+    
     blank_board <- tidyr::crossing(row = 1:5, col = 1:6) %>% 
       dplyr::mutate(round = 1) %>% 
       dplyr::bind_rows(
@@ -84,7 +87,8 @@ app_server <- function(input, output,session) {
       dplyr::left_join(
         dplyr::select(rv$game_board, -n),
         by = "clue"
-      )
+      ) %>% 
+      dplyr::mutate(double = ifelse(n %in% doubles, TRUE, FALSE))
     
     return(out)
   })
