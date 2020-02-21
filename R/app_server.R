@@ -4,7 +4,7 @@ app_server <- function(input, output,session) {
  
   # defining initial reactive values ----
   rv <- reactiveValues(
-    game = sample(1:6000, 1),
+    game_number = sample(1:6000, 1),
     round = 1,
     n = 0,
     score = 0,
@@ -14,11 +14,17 @@ app_server <- function(input, output,session) {
   
   # loading the data ----
   observe({
+    rv$game = read_game(game = rv$game_number)
+    rv$scores = read_game(game = rv$game_number)
+  })
+  
+  
+  observe({
     isolate({
-      rv$game_board <- whatr_board(game = rv$game)
-      rv$clue_seq <- whatr_clues(game = rv$game)
-      rv$game_info <- whatr_info(game = rv$game)
-      rv$doubles <- whatr_doubles(game = rv$game)
+      rv$game_board <- whatr_board(html = rv$game)
+      rv$clue_seq <- whatr_clues(html = rv$game)
+      rv$game_info <- whatr_info(html = rv$game, game = rv$game_number)
+      rv$doubles <- whatr_doubles(html = rv$scores)
     })
   })
   
