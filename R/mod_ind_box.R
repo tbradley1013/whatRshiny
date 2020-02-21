@@ -200,7 +200,9 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
     answer_stringdist <- stringdist::stringdist(correct_answer, input$user_answer)
     
     if (stringr::str_detect(stringr::str_to_lower(correct_answer), stringr::str_to_lower(input$user_answer))){
-      is_correct <- TRUE
+      if (nchar(input$user_answer) <= 2){
+        is_correct <- FALSE
+      } else is_correct <- TRUE
     } else if (answer_stringdist < 3) {
       is_correct <- TRUE
     } else {
@@ -221,7 +223,7 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
         ),
         div(
           actionButton(
-            "close_confirm",
+            ns("close_confirm"),
             "Close",
             width = "100%"
           ),
