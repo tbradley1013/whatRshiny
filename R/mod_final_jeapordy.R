@@ -190,7 +190,35 @@ mod_final_jeapordy_server <- function(input, output, session, game_info, rv){
   })
   
   observeEvent(input$close_confirm, {
-    rv$game_done <- TRUE
+    removeModal()
+    
+    # if (rv$score < 0){
+    #   style = "color:red;"
+    # } else if (rv$score > 0){
+    #   style = "color:green;"
+    # } else {
+    #   style = "color:white;"
+    # }
+    
+    dialog <- modalDialog(
+      h1("Game Over!"),
+      h3("Final Score:", span(rv$score)),
+      actionButton(
+        inputId = ns("replay"),
+        label = "Play Again!",
+        class = "btn-success"
+      ),
+      footer = NULL,
+      size = "l",
+      fade = FALSE
+    )
+    
+    showModal(dialog)
+  })
+  
+  observeEvent(input$replay, {
+    removeModal()
+    session$reload()
   })
 }
     
