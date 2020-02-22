@@ -22,6 +22,24 @@
   text-align:center;
 }
 
+.final-j-box {
+  background-color: #0C00A8;
+  color: #E5A561;
+  /*width: 16.66%;
+  height: 20%;*/
+  width:100%;
+  height: 400px;
+  font-size:4em;
+  margin: 1px;
+  white-space: normal;
+  text-align:center;
+}
+
+.final-jeapordy {
+  width: 90%;
+  margin: 0 auto;
+}
+
 .categories-row {
   width:90%;
   margin: 0 auto;

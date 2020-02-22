@@ -56,7 +56,8 @@ app_ui <- function() {
         ),
         shinyjs::hidden(
           div(
-            id = "final-jeapordy"
+            id = "final-jeapordy",
+            mod_final_jeapordy_ui("final_jeapordy_ui_1")
           )
         )
       ),
