@@ -68,7 +68,7 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
     value <- get_value(selected_row, selected_round)
     
     if (question()$double){
-      max_value <- max(value*selected_round, rv$score)
+      max_value <- max(1000*selected_round, rv$score)
       dialog <- modalDialog(
         h1("Daily Double!"),
         numericInput(
