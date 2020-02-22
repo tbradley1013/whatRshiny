@@ -8,7 +8,7 @@
 ## 2.1 Add modules
 ## 
 golem::add_module( name = "ind_box" ) # Name of the module
-golem::add_module( name = "my_other_module" ) # Name of the module
+golem::add_module( name = "final_jeapordy" ) # Name of the module
 
 ## 2.2 Add dependencies
 

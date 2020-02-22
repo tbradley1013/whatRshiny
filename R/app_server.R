@@ -5,7 +5,7 @@ app_server <- function(input, output,session) {
   # defining initial reactive values ----
   rv <- reactiveValues(
     game_number = sample(1:6000, 1),
-    round = 1,
+    round = 3,
     n = 0,
     score = 0,
     loaded = FALSE
@@ -55,20 +55,20 @@ app_server <- function(input, output,session) {
     cat("Round 2 Total =", rv$n_round_2, "\n")
   })
   
-  observe({
-    req(rv$n_round_1)
-    
-    total <- rv$n_round_1 + rv$n_round_2
-    
-    if (rv$n < rv$n_round_1){
-      rv$round <- 1
-    } else if (rv$n < total){
-      rv$round <- 2
-    } else {
-      rv$round <- 3
-    }
-    
-  })
+  # observe({
+  #   req(rv$n_round_1)
+  #   
+  #   total <- rv$n_round_1 + rv$n_round_2
+  #   
+  #   if (rv$n < rv$n_round_1){
+  #     rv$round <- 1
+  #   } else if (rv$n < total){
+  #     rv$round <- 2
+  #   } else {
+  #     rv$round <- 3
+  #   }
+  #   
+  # })
   
   observe({
     cat("Current n =", rv$n, "and round =", rv$round, "\n")
@@ -207,6 +207,9 @@ app_server <- function(input, output,session) {
       )
     })
     
+    callModule(mod_final_jeapordy_server, "final_jeapordy_ui_1", 
+               game_info = game_info, rv = rv)
+    
     rv$loaded <- TRUE
   })
   
@@ -216,13 +219,18 @@ app_server <- function(input, output,session) {
     if (rv$round == 1){
       shinyjs::show("round_1")
       shinyjs::hide("round_2")
+      shinyjs::show("categories-row")
+      shinyjs::hide("final-jeapordy")
     } else if (rv$round == 2){
       shinyjs::hide("round_1")
       shinyjs::show("round_2")
+      shinyjs::show("categories-row")
+      shinyjs::hide("final-jeapordy")
     } else {
       shinyjs::hide("round_1")
       shinyjs::hide("round_2")
       shinyjs::hide("categories-row")
+      shinyjs::show("final-jeapordy")
     }
   })
   
@@ -246,5 +254,24 @@ app_server <- function(input, output,session) {
       )
     )
   })
+  
+  # restart after final jeapordy
+  # observe({
+  #   req(rv$game_done)
+  #   waiter::waiter_show(custom_loading_spinner())
+  #   rv$game_number <- sample(1:6000, 1)
+  #   rv$game_done <- FALSE
+  #   rv$n <- 0
+  #   rv$score <- 0
+  #   rv$round <- 1
+  #   isolate({
+  #     rv$game = read_game(game = rv$game_number)
+  #     rv$scores = read_game(game = rv$game_number)
+  #     rv$game_board <- whatr_board(html = rv$game)
+  #     rv$clue_seq <- whatr_clues(html = rv$game)
+  #     rv$game_info <- whatr_info(html = rv$game, game = rv$game_number)
+  #     rv$doubles <- whatr_doubles(html = rv$scores)
+  #   })
+  # })
   
 }
