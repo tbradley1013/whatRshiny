@@ -20,3 +20,9 @@ function click_button(button_label){
     }
   }
 }
+
+Shiny.addCustomMessageHandler("refocus", function(NULL) {
+  $(".answer-div").children().children()[1].focus();
+    //document.getElementByClassName("shiny-input-container").focus();
+  }
+);

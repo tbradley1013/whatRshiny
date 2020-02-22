@@ -97,6 +97,7 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
         ),
         br(),br(),br(),
         div(
+          class = "answer-div",
           shinyjs::hidden(
             textInput(
               inputId = ns("user_answer"),
@@ -135,6 +136,7 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
       )
       
       showModal(dialog)
+      
     }
     
     
@@ -149,6 +151,7 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
       ),
       br(),br(),br(),
       div(
+        class = "answer-div",
         textInput(
           inputId = ns("user_answer"),
           label = "Answer"
@@ -189,6 +192,7 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
     shinyjs::show("user_answer")
     shinyjs::show("submit_answer")
     shinyjs::enable("submit_answer")
+    session$sendCustomMessage(type="refocus",message=list(NULL))
   })
   
   observeEvent(input$submit_answer, {
@@ -197,9 +201,9 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
     value <- rv$q_value
     correct_answer <- question()$answer
     
-    answer_stringdist <- stringdist::stringdist(correct_answer, input$user_answer)
+    answer_stringdist <- stringdist::stringdist(tolower(correct_answer), tolower(input$user_answer))
     
-    if (stringr::str_detect(stringr::str_to_lower(correct_answer), stringr::str_to_lower(input$user_answer))){
+    if (stringr::str_detect(tolower(correct_answer), tolower(input$user_answer))){
       if (nchar(input$user_answer) <= 2){
         is_correct <- FALSE
       } else is_correct <- TRUE
