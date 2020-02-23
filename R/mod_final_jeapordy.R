@@ -29,7 +29,7 @@ mod_final_jeapordy_ui <- function(id){
 mod_final_jeapordy_server <- function(input, output, session, game_info, rv){
   ns <- session$ns
   final_q <- reactive({
-    # browser()
+    browser()
     game_info() %>% 
       dplyr::filter(round == 3)
   })

@@ -178,7 +178,26 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
   
   observeEvent(input$stay_silent, {
     removeModal()
+    correct_answer <- question()$answer
     
+    dialog <- modalDialog(
+      h3(
+        "Correct Answer:", correct_answer
+      ),
+      div(
+        actionButton(
+          ns("close_confirm"),
+          "Close",
+          width = "100%"
+        ),
+        style = "width:150px;margin:0 auto;"
+      ),
+      footer = NULL,
+      fade = FALSE,
+      size = "l"
+    )
+    
+    showModal(dialog)
     # for some reason these button clicks happen twice everytime 
     # they are clicked
     rv$n <- rv$n + 1
@@ -215,13 +234,13 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
     
     if (is_correct){
       dialog <- modalDialog(
-        div(
+        h1(
           "You have answered correctly!"
         ),
-        div(
+        h3(
           "Correct Answer:", correct_answer
         ),
-        div(
+        h3(
           "Your Answer:", 
           span(input$user_answer, style = "color:green")
         ),
@@ -242,13 +261,13 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
       rv$score <- rv$score + (value/2)
     } else {
       dialog <- modalDialog(
-        div(
+        h1(
           "You have answered incorrectly!"
         ),
-        div(
+        h3(
           "Correct Answer:", correct_answer
         ),
-        div(
+        h3(
           "Your Answer:", 
           span(input$user_answer, style = "color:red")
         ),

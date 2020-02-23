@@ -5,7 +5,7 @@ app_server <- function(input, output,session) {
   # defining initial reactive values ----
   rv <- reactiveValues(
     game_number = sample(1:6000, 1),
-    round = 1,
+    round = 3,
     n = 0,
     score = 0,
     loaded = FALSE
@@ -50,25 +50,26 @@ app_server <- function(input, output,session) {
     # round_counts <- dplyr::count(rv$clue_seq, round)
     
     rv$n_round_1 <- max(rv$game_board$n[rv$game_board$round == 1])*2
-    rv$n_round_2 <- max(rv$game_board$n[rv$game_board$round == 2])*2
+    rv$n_round_2 <- max(rv$game_board$n[rv$game_board$round == 2] - (rv$n_round_1)/2)*2
     cat("Round 1 Total =", rv$n_round_1, "\n")
     cat("Round 2 Total =", rv$n_round_2, "\n")
   })
   
-  observe({
-    req(rv$n_round_1)
-
-    total <- rv$n_round_1 + rv$n_round_2
-
-    if (rv$n < rv$n_round_1){
-      rv$round <- 1
-    } else if (rv$n < total){
-      rv$round <- 2
-    } else {
-      rv$round <- 3
-    }
-
-  })
+  # observe({
+  #   req(rv$n_round_1)
+  # 
+  #   total <- rv$n_round_1 + rv$n_round_2
+  #   cat("Total:", total, "\n")
+  # 
+  #   if (rv$n < rv$n_round_1){
+  #     rv$round <- 1
+  #   } else if (rv$n < total){
+  #     rv$round <- 2
+  #   } else if (rv$n >= total){
+  #     rv$round <- 3
+  #   }
+  # 
+  # })
   
   observe({
     cat("Current n =", rv$n, "and round =", rv$round, "\n")
@@ -109,7 +110,7 @@ app_server <- function(input, output,session) {
   game_info <- reactive({
     req(rv$game_board)
     
-    doubles <- c(rv$doubles$single, (rv$doubles$double + rv$n_round_1))
+    doubles <- c(rv$doubles$single, (rv$doubles$double + (rv$n_round_1/2)))
     
     blank_board <- tidyr::crossing(row = 1:5, col = 1:6) %>% 
       dplyr::mutate(round = 1) %>% 
@@ -117,7 +118,7 @@ app_server <- function(input, output,session) {
         tidyr::crossing(row = 1:5, col = 1:6) %>% 
           dplyr::mutate(round = 2)
       ) %>% 
-      dplyr::add_row(row = 0, col = 0, round = 3)
+      dplyr::add_row(row = 1, col = 1, round = 3)
     
     out <- blank_board %>% 
       # dplyr::left_join(rv$clue_seq, by = c("round", "row", "col")) %>% 
@@ -226,7 +227,7 @@ app_server <- function(input, output,session) {
       shinyjs::show("round_2")
       shinyjs::show("categories-row")
       shinyjs::hide("final-jeapordy")
-    } else {
+    } else if (rv$round == 3){
       shinyjs::hide("round_1")
       shinyjs::hide("round_2")
       shinyjs::hide("categories-row")
