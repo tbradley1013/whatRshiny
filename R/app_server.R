@@ -5,7 +5,7 @@ app_server <- function(input, output,session) {
   # defining initial reactive values ----
   rv <- reactiveValues(
     game_number = sample(1:6000, 1),
-    round = 3,
+    round = 1,
     n = 0,
     score = 0,
     loaded = FALSE
@@ -14,8 +14,8 @@ app_server <- function(input, output,session) {
   
   # loading the data ----
   observe({
-    rv$game = read_game(game = rv$game_number)
-    rv$scores = read_game(game = rv$game_number)
+    rv$game = whatr::read_game(game = rv$game_number)
+    rv$scores = whatr::read_scores(game = rv$game_number)
   })
   
   
@@ -55,20 +55,20 @@ app_server <- function(input, output,session) {
     cat("Round 2 Total =", rv$n_round_2, "\n")
   })
   
-  # observe({
-  #   req(rv$n_round_1)
-  #   
-  #   total <- rv$n_round_1 + rv$n_round_2
-  #   
-  #   if (rv$n < rv$n_round_1){
-  #     rv$round <- 1
-  #   } else if (rv$n < total){
-  #     rv$round <- 2
-  #   } else {
-  #     rv$round <- 3
-  #   }
-  #   
-  # })
+  observe({
+    req(rv$n_round_1)
+
+    total <- rv$n_round_1 + rv$n_round_2
+
+    if (rv$n < rv$n_round_1){
+      rv$round <- 1
+    } else if (rv$n < total){
+      rv$round <- 2
+    } else {
+      rv$round <- 3
+    }
+
+  })
   
   observe({
     cat("Current n =", rv$n, "and round =", rv$round, "\n")

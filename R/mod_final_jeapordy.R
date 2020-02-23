@@ -60,7 +60,8 @@ mod_final_jeapordy_server <- function(input, output, session, game_info, rv){
           value = 0,
           min = 0, 
           max = user_score,
-          step = 100
+          step = 100,
+          width = "100%"
         ),
         actionButton(
           inputId = ns("make_wager"),
