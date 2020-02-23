@@ -21,9 +21,9 @@ app_server <- function(input, output,session) {
   
   observe({
     isolate({
-      rv$game_board <- whatr_board(html = rv$game)
-      rv$clue_seq <- whatr_clues(html = rv$game)
-      rv$game_info <- whatr_info(html = rv$game, game = rv$game_number)
+      rv$game_board <- whatr::whatr_board(html = rv$game)
+      # rv$clue_seq <- whatr_clues(html = rv$game)
+      rv$game_info <- whatr::whatr_info(html = rv$game)
       rv$doubles <- whatr_doubles(html = rv$scores)
     })
   })
@@ -46,11 +46,11 @@ app_server <- function(input, output,session) {
   
   # Calculating round counts and current round -----
   observe({
-    req(rv$clue_seq)
-    round_counts <- dplyr::count(rv$clue_seq, round)
+    req(rv$game_board)
+    # round_counts <- dplyr::count(rv$clue_seq, round)
     
-    rv$n_round_1 <- round_counts$n[round_counts$round == 1]*2
-    rv$n_round_2 <- round_counts$n[round_counts$round == 2]*2
+    rv$n_round_1 <- max(rv$game_board$n[rv$game_board$round == 1])*2
+    rv$n_round_2 <- max(rv$game_board$n[rv$game_board$round == 2])*2
     cat("Round 1 Total =", rv$n_round_1, "\n")
     cat("Round 2 Total =", rv$n_round_2, "\n")
   })
@@ -107,7 +107,7 @@ app_server <- function(input, output,session) {
   
   # putting together all of the game info ----
   game_info <- reactive({
-    req(rv$game_board, rv$clue_seq)
+    req(rv$game_board)
     
     doubles <- c(rv$doubles$single, (rv$doubles$double + rv$n_round_1))
     
@@ -120,10 +120,10 @@ app_server <- function(input, output,session) {
       dplyr::add_row(row = 0, col = 0, round = 3)
     
     out <- blank_board %>% 
-      dplyr::left_join(rv$clue_seq, by = c("round", "row", "col")) %>% 
+      # dplyr::left_join(rv$clue_seq, by = c("round", "row", "col")) %>% 
       dplyr::left_join(
-        dplyr::select(rv$game_board, -n),
-        by = "clue"
+        rv$game_board,
+        by = c("round", "row", "col")
       ) %>% 
       dplyr::mutate(double = ifelse(n %in% doubles, TRUE, FALSE))
     
