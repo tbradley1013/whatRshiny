@@ -142,7 +142,7 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
     
   })
   
-  observeEvent(input$make_wager, {
+  observeEvent(input$submit_wager, {
     rv$q_value <- input$wager
     
     dialog <- modalDialog(

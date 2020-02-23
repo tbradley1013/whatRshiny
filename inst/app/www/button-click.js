@@ -8,6 +8,7 @@ $(document).keydown(function(event){
       click_button("Submit Answer");
       click_button("Close");
       click_button("Thanks Alex!");
+      click_button("Make Wager!");
     }
 });
 
