@@ -14,17 +14,17 @@ app_server <- function(input, output,session) {
   
   # loading the data ----
   observe({
-    rv$game = whatr::read_game(game = rv$game_number)
-    rv$scores = whatr::read_scores(game = rv$game_number)
+    rv$game = whatr::whatr_html(x = rv$game_number, out = "showgame")
+    rv$scores = whatr::whatr_html(x = rv$game_number, out = "showscores")
   })
   
   
   observe({
     isolate({
-      rv$game_board <- whatr::whatr_board(html = rv$game)
+      rv$game_board <- whatr::whatr_board(game = rv$game)
       # rv$clue_seq <- whatr_clues(html = rv$game)
-      rv$game_info <- whatr::whatr_info(html = rv$game)
-      rv$doubles <- whatr_doubles(html = rv$scores)
+      rv$game_info <- whatr::whatr_info(game = rv$game)
+      rv$doubles <- whatr::whatr_doubles(game = rv$scores)
     })
   })
   

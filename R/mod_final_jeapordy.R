@@ -29,7 +29,6 @@ mod_final_jeapordy_ui <- function(id){
 mod_final_jeapordy_server <- function(input, output, session, game_info, rv){
   ns <- session$ns
   final_q <- reactive({
-    browser()
     game_info() %>% 
       dplyr::filter(round == 3)
   })
@@ -108,7 +107,7 @@ mod_final_jeapordy_server <- function(input, output, session, game_info, rv){
   })
   
   observeEvent(input$submit_answer, {
-    # browser()
+    browser()
     
     value <- rv$q_value
     correct_answer <- final_q()$answer
