@@ -9,6 +9,6 @@ golem::detach_all_attached()
 golem::document_and_reload()
 
 # Run the application
-whatRshiny::run_app()
+whatRshiny::play_jeopardy()
 
 
