@@ -92,8 +92,9 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
     } else {
       rv$q_value <- value
       dialog <- modalDialog(
-        h1(
-          question()$clue
+        div(
+          toupper(question()$clue),
+          class = "clue-text"
         ),
         br(),br(),br(),
         div(
