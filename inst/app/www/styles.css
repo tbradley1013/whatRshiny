@@ -77,6 +77,11 @@ body {
   height:20%;
 }
 
+.clue-text {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 45px;
+}
+
 #links-div {
   position:absolute;
   top:10px;

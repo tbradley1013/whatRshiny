@@ -77,6 +77,7 @@ golem_add_external_resources <- function(){
     golem::activate_js(),
     golem::favicon(),
     tags$link(href="https://fonts.googleapis.com/css?family=Questrial&display=swap", rel="stylesheet"),
+    tags$link(href="https://fonts.googleapis.com/css?family=Libre+Baskerville&display=swap", rel="stylesheet"),
     tags$link(rel="stylesheet", type="text/css", href="www/styles.css"),
     tags$script(src = "www/button-click.js")
   )
