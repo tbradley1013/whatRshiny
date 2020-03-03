@@ -34,7 +34,7 @@ mod_final_jeapordy_server <- function(input, output, session, game_info, rv){
   })
   
   output$final_cat <- renderUI({
-    category <- final_q()$category
+    category <- toupper(final_q()$category)
     div(
       class = "final-j-div",
       div("Final Jeapordy!", style = "color:white;font-size:60px"),
@@ -76,7 +76,7 @@ mod_final_jeapordy_server <- function(input, output, session, game_info, rv){
   
   observeEvent(input$make_wager, {
     removeModal()
-    rv$q_value <- input$wager
+    rv$q_value <- input$final_wager
     dialog <- modalDialog(
       h1(
         final_q()$clue
@@ -107,8 +107,6 @@ mod_final_jeapordy_server <- function(input, output, session, game_info, rv){
   })
   
   observeEvent(input$submit_answer, {
-    browser()
-    
     value <- rv$q_value
     correct_answer <- final_q()$answer
     
@@ -150,7 +148,7 @@ mod_final_jeapordy_server <- function(input, output, session, game_info, rv){
         size = "l"
       )
       
-      rv$score <- rv$score + (value/2)
+      rv$score <- rv$score + value
     } else {
       dialog <- modalDialog(
         div(
@@ -177,7 +175,7 @@ mod_final_jeapordy_server <- function(input, output, session, game_info, rv){
         size = "l"
       )
       
-      rv$score <- rv$score - (value/2)
+      rv$score <- rv$score - value
     }
     
     rv$n <- rv$n + 1
