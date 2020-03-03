@@ -55,21 +55,21 @@ app_server <- function(input, output,session) {
     cat("Round 2 Total =", rv$n_round_2, "\n")
   })
   
-  # observe({
-  #   req(rv$n_round_1)
-  # 
-  #   total <- rv$n_round_1 + rv$n_round_2
-  #   cat("Total:", total, "\n")
-  # 
-  #   if (rv$n < rv$n_round_1){
-  #     rv$round <- 1
-  #   } else if (rv$n < total){
-  #     rv$round <- 2
-  #   } else if (rv$n >= total){
-  #     rv$round <- 3
-  #   }
-  # 
-  # })
+  observe({
+    req(rv$n_round_1)
+
+    total <- rv$n_round_1 + rv$n_round_2
+    cat("Total:", total, "\n")
+
+    if (rv$n < rv$n_round_1){
+      rv$round <- 1
+    } else if (rv$n < total){
+      rv$round <- 2
+    } else if (rv$n >= total){
+      rv$round <- 3
+    }
+
+  })
   
   observe({
     cat("Current n =", rv$n, "and round =", rv$round, "\n")
@@ -155,7 +155,7 @@ app_server <- function(input, output,session) {
         shinyjs::disabled(
           actionButton(
             inputId = paste0("category_", .x),
-            label = value,
+            label = toupper(value),
             class = "cat-box"
           )
           # span(
