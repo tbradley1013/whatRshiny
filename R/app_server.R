@@ -5,7 +5,7 @@ app_server <- function(input, output,session) {
   # defining initial reactive values ----
   rv <- reactiveValues(
     game_number = sample(1:6000, 1),
-    round = 3,
+    round = 1,
     n = 0,
     score = 0,
     loaded = FALSE
@@ -109,8 +109,7 @@ app_server <- function(input, output,session) {
   # putting together all of the game info ----
   game_info <- reactive({
     req(rv$game_board)
-    
-    doubles <- c(rv$doubles$single, (rv$doubles$double + (rv$n_round_1/2)))
+    doubles <- rv$doubles$n
     
     blank_board <- tidyr::crossing(row = 1:5, col = 1:6) %>% 
       dplyr::mutate(round = 1) %>% 
