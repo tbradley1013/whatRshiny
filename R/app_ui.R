@@ -78,14 +78,19 @@ golem_add_external_resources <- function(){
     tags$link(href="https://fonts.googleapis.com/css?family=Questrial&display=swap", rel="stylesheet"),
     tags$link(href="https://fonts.googleapis.com/css?family=Libre+Baskerville&display=swap", rel="stylesheet"),
     tags$link(rel="stylesheet", type="text/css", href="www/styles.css"),
-    tags$script(src = "www/button-click.js")
+    tags$script(src = "www/button-click.js"),
+    tags$script(src = "www/update-intro-text.js")
   )
 }
 
 
 custom_loading_spinner <- function(){
   tagList(
-    h1("Loading your JEAPORDY! game...", style = "margin-bottom:20px;margin-top:-50px;"),
+    h1(
+      "Loading your JEAPORDY! game...", 
+      style = "margin-bottom:20px;margin-top:-50px;", 
+      class = "intro-text"
+    ),
     waiter::spin_loaders(4, color = "#E5A561", style = "font-size:2em")
   )
 }

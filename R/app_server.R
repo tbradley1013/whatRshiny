@@ -41,9 +41,19 @@ app_server <- function(input, output,session) {
   # remove loading screen when board is ready ---
   observe({
     req(game_info(), rv$loaded)
+
+    msgs <- c("THIS", "IS", "JEOPARDY!")
+
+    for (i in 1:3){
+      msg <- msgs[i]
+      session$sendCustomMessage("update_intro_text", msg)
+      Sys.sleep(1)
+    }
+
+
     waiter::waiter_hide()
   })
-  
+
   # Calculating round counts and current round -----
   observe({
     req(rv$game_board)
