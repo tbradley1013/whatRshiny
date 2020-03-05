@@ -201,7 +201,7 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
     showModal(dialog)
     # for some reason these button clicks happen twice everytime 
     # they are clicked
-    rv$n <- rv$n + 1
+    # rv$n <- rv$n + 1
   })
   
   observeEvent(input$buzz_in, {
@@ -289,7 +289,7 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
       rv$score <- rv$score - (value/2)
     }
     
-    rv$n <- rv$n + 1
+    # rv$n <- rv$n + 1
     
     removeModal()
     showModal(dialog)
@@ -300,7 +300,9 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
   
   
   observeEvent(input$close_confirm, {
+    rv$n <- rv$n + 1
     removeModal()
+    
   })
   
   
