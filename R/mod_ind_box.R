@@ -27,6 +27,10 @@ mod_ind_box_ui <- function(id){
 mod_ind_box_server <- function(input, output, session, game_info, selected_row, selected_col, selected_round, rv){
   ns <- session$ns
   
+  
+  initial_n <- reactive({rv$n})
+  isolate(initial_n)
+  
   question <- reactive({
     req(game_info())
     # browser()
@@ -300,7 +304,14 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
   
   
   observeEvent(input$close_confirm, {
-    rv$n <- rv$n + 1
+    # browser()
+    question_label <- paste0("question_", selected_row, "_", selected_col, "_", selected_round)
+    
+    if (is.null(rv[[question_label]])){
+      rv$n <- rv$n + 1
+      rv[[question_label]] <- TRUE
+    }
+    
     removeModal()
     
   })

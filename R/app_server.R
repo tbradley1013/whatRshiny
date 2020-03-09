@@ -59,8 +59,8 @@ app_server <- function(input, output,session) {
     req(rv$game_board)
     # round_counts <- dplyr::count(rv$clue_seq, round)
     
-    rv$n_round_1 <- max(rv$game_board$n[rv$game_board$round == 1])*2
-    rv$n_round_2 <- max(rv$game_board$n[rv$game_board$round == 2] - (rv$n_round_1)/2)*2
+    rv$n_round_1 <- max(rv$game_board$n[rv$game_board$round == 1])
+    rv$n_round_2 <- max(rv$game_board$n[rv$game_board$round == 2] - (rv$n_round_1))
     cat("Round 1 Total =", rv$n_round_1, "\n")
     cat("Round 2 Total =", rv$n_round_2, "\n")
   })
@@ -86,7 +86,7 @@ app_server <- function(input, output,session) {
   })
   
   observe({
-    if (rv$n == 30){
+    if (rv$n == 15){
       dialog <- modalDialog(
         h3("Tell us a little about yourself!"),
         textInput(
@@ -187,38 +187,41 @@ app_server <- function(input, output,session) {
   observe({
     req(game_info())
     
-    purrr::map2(game_info()$row, game_info()$col, ~{
-      id <- paste("ind_box_ui_1", .x, .y, sep = "_")
-
-      callModule(
-        mod_ind_box_server,
-        id = id,
-        session = session,
-        game_info = game_info,
-        selected_row = .x,
-        selected_col = .y,
-        selected_round = 1,
-        rv = rv
-      )
-    })
-    
-    purrr::map2(game_info()$row, game_info()$col, ~{
-      id <- paste("ind_box_ui_2", .x, .y, sep = "_")
+    isolate({
+      purrr::map2(game_info()$row, game_info()$col, ~{
+        id <- paste("ind_box_ui_1", .x, .y, sep = "_")
+        
+        callModule(
+          mod_ind_box_server,
+          id = id,
+          session = session,
+          game_info = game_info,
+          selected_row = .x,
+          selected_col = .y,
+          selected_round = 1,
+          rv = rv
+        )
+      })
       
-      callModule(
-        mod_ind_box_server,
-        id = id,
-        session = session,
-        game_info = game_info,
-        selected_row = .x,
-        selected_col = .y,
-        selected_round = 2,
-        rv = rv
-      )
+      purrr::map2(game_info()$row, game_info()$col, ~{
+        id <- paste("ind_box_ui_2", .x, .y, sep = "_")
+        
+        callModule(
+          mod_ind_box_server,
+          id = id,
+          session = session,
+          game_info = game_info,
+          selected_row = .x,
+          selected_col = .y,
+          selected_round = 2,
+          rv = rv
+        )
+      })
+      
+      callModule(mod_final_jeapordy_server, "final_jeapordy_ui_1", 
+                 game_info = game_info, rv = rv)
     })
-    
-    callModule(mod_final_jeapordy_server, "final_jeapordy_ui_1", 
-               game_info = game_info, rv = rv)
+   
     
     rv$loaded <- TRUE
   })
