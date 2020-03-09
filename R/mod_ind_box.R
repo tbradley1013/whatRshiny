@@ -205,7 +205,6 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
     showModal(dialog)
     # for some reason these button clicks happen twice everytime 
     # they are clicked
-    # rv$n <- rv$n + 1
   })
   
   observeEvent(input$buzz_in, {
@@ -220,7 +219,7 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
   })
   
   observeEvent(input$submit_answer, {
-    # browser()
+    value_label <- paste0("value_", selected_row, "_", selected_col, "_", selected_round)
     
     value <- rv$q_value
     correct_answer <- question()$answer
@@ -263,7 +262,11 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
         size = "l"
       )
       
-      rv$score <- rv$score + (value/2)
+      if (is.null(rv[[value_label]])){
+        rv$score <- rv$score + (value)
+        rv[[value_label]] <- TRUE
+      }
+      
     } else {
       dialog <- modalDialog(
         h1(
@@ -290,10 +293,12 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
         size = "l"
       )
       
-      rv$score <- rv$score - (value/2)
+      if (is.null(rv[[value_label]])){
+        rv$score <- rv$score - (value)
+        rv[[value_label]] <- TRUE
+      }
     }
     
-    # rv$n <- rv$n + 1
     
     removeModal()
     showModal(dialog)
@@ -304,7 +309,6 @@ mod_ind_box_server <- function(input, output, session, game_info, selected_row, 
   
   
   observeEvent(input$close_confirm, {
-    # browser()
     question_label <- paste0("question_", selected_row, "_", selected_col, "_", selected_round)
     
     if (is.null(rv[[question_label]])){
