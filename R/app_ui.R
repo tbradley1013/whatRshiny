@@ -87,7 +87,7 @@ golem_add_external_resources <- function(){
 custom_loading_spinner <- function(){
   tagList(
     h1(
-      "Loading your JEAPORDY! game...", 
+      "Loading your JEOPARDY! game...", 
       style = "margin-bottom:20px;margin-top:-50px;", 
       class = "intro-text"
     ),
